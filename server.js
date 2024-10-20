@@ -44,15 +44,14 @@ app.post("/ask", async (req, res) => {
         {
           role: "system",
           content:
-            "You are an assistant that returns recipes step by step. You give the recipe back in max 100 words.  Please don't include examples. If someone enters an input  that is not asking for a recipe say you can't cook this and add something witty.",
+            "You are an assistant that returns recipes step by step. You give the recipe back in max 150 words.  Please don't include examples. If someone enters an input  that is not asking for a recipe say you can't cook this and add something witty.",
         },
         { role: "user", content: question },
       ],
-      max_tokens: 100,
+      max_tokens: 150,
     });
 
     const answer = response.choices[0].message.content.trim();
-    // res.status(200).json({ answer });
 
     res.status(200).json({ answer, imageUrl });
   } catch (error) {
