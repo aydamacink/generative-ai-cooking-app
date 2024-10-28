@@ -25,7 +25,7 @@ app.post("/ask", async (req, res) => {
     // Fetch a dish image from Pexels API
     const imageResponse = await axios.get("https://api.pexels.com/v1/search", {
       headers: {
-        Authorization: process.env.PEXELS_API_KEY, // Use the Pexels API key from .env
+        Authorization: process.env.PEXELS_API_KEY,
       },
       params: {
         query: question, // Use the question or recipe name as the search query
@@ -48,7 +48,7 @@ app.post("/ask", async (req, res) => {
         },
         { role: "user", content: question },
       ],
-      max_tokens: 150,
+      max_tokens: 200,
     });
 
     const answer = response.choices[0].message.content.trim();

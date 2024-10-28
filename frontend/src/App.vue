@@ -25,21 +25,20 @@
       </div>
     </div>
 
-    <!-- Show message when available, but not during or after loading image -->
     <p v-if="message && !recipeImage" class="message">{{ message }}</p>
   </div>
 </template>
 
 <script>
-import axios from "axios"; // Import axios for API requests
+import axios from "axios";
 
 export default {
   data() {
     return {
-      recipe: "", // Holds the input value
-      message: "", // Placeholder for user input message
-      steps: [], // Holds the individual recipe steps
-      recipeImage: "", // Placeholder for a dish image
+      recipe: "",
+      message: "",
+      steps: [],
+      recipeImage: "",
     };
   },
   methods: {
@@ -51,15 +50,15 @@ export default {
           // Fetch the image and recipe from the backend
           const response = await axios.post("/ask", { question: this.recipe });
 
-          // Set the image
           this.recipeImage = response.data.imageUrl;
 
-          // Step 1: Split the recipe into steps based on the pattern "number + period + space"
           const recipeText = response.data.answer;
           this.steps = recipeText
             .split(/(?:\d+\.\s)/) // Split by a number, followed by a period and space
             .map((step) => step.trim())
-            .filter((step) => step !== "");
+            .filter(
+              (step) => step !== "" && !step.toLowerCase().includes("recipe")
+            );
         } catch (error) {
           this.message = "Something went wrong fetching the recipe or image.";
         }
@@ -72,7 +71,6 @@ export default {
 </script>
 
 <style scoped>
-/* General container styling */
 .container {
   max-width: 600px;
   margin: 50px auto;
@@ -83,7 +81,6 @@ export default {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Input field styling */
 .input {
   padding: 15px;
   font-size: 1rem;
@@ -94,14 +91,12 @@ export default {
   transition: all 0.3s ease;
 }
 
-/* Focus state for input field */
 .input:focus {
   border-color: #42b983;
   box-shadow: 0 0 5px rgba(66, 185, 131, 0.5);
   outline: none;
 }
 
-/* Button styling with Font Awesome icon */
 .btn {
   padding: 15px 30px;
   font-size: 1.2rem;
@@ -113,13 +108,11 @@ export default {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Button hover effect */
 .btn:hover {
   background-color: #5b0ba8; /* Darker Purple */
   transform: scale(1.05);
 }
 
-/* Animated message */
 .message {
   margin-top: 20px;
   font-size: 1.2rem;
@@ -127,7 +120,6 @@ export default {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Animated answer section */
 .answer {
   margin-top: 30px;
   padding: 15px;
@@ -136,7 +128,6 @@ export default {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Dish image styling */
 .dish-image {
   width: 100%;
   border-radius: 10px;
@@ -154,7 +145,6 @@ export default {
   }
 }
 
-/* Responsive design for smaller screens */
 @media (max-width: 600px) {
   .container {
     width: 100%;
