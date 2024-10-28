@@ -49,7 +49,7 @@ app.post("/ask", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: `You are an assistant that returns recipes step by step. Please keep recipes under 150 words and exclude any unwanted ingredients. ${exclusions}`,
+          content: `You are an assistant that returns the list of ingredients and then the recipe step by step, if you are asked for a recipe.Use '**Ingredients:**' and '**Instructions:**' as headers. Please keep recipes under 150 words and exclude any unwanted ingredients. If you are not asked a cooking recipe, but something else, answer something witty ${exclusions}`,
         },
         { role: "user", content: question },
       ],

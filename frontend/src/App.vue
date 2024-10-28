@@ -23,6 +23,15 @@
       alt="Dish Image"
       class="dish-image" />
 
+    <div v-if="ingredients.length > 0" class="ingredients-section">
+      <h2>Ingredients</h2>
+      <ul>
+        <li v-for="(ingredient, index) in ingredients" :key="index">
+          {{ ingredient }}
+        </li>
+      </ul>
+    </div>
+
     <div v-if="steps.length > 0" class="recipe-steps">
       <h2>Recipe Steps</h2>
       <div v-for="(step, index) in steps" :key="index" class="recipe-step">
@@ -43,6 +52,7 @@ export default {
       recipe: "",
       excludedIngredients: "",
       message: "",
+      ingredients: [],
       steps: [],
       recipeImage: "",
     };
@@ -65,12 +75,23 @@ export default {
           this.recipeImage = response.data.imageUrl;
           const recipeText = response.data.answer;
 
-          this.steps = recipeText
-            .split(/(?:\d+\.\s)/)
-            .map((step) => step.trim())
-            .filter(
-              (step) => step !== "" && !step.toLowerCase().includes("recipe")
-            );
+          const [ingredientsText, instructionsText] =
+            recipeText.split("**Instructions:**");
+
+          this.ingredients = ingredientsText
+            ? ingredientsText
+                .replace("**Ingredients:**", "")
+                .split("\n")
+                .map((item) => item.trim())
+                .filter((item) => item !== "")
+            : [];
+
+          this.steps = instructionsText
+            ? instructionsText
+                .split(/\d+\.\s/)
+                .map((step) => step.trim())
+                .filter((step) => step !== "")
+            : [];
         } catch (error) {
           this.message = "Something went wrong fetching the recipe or image.";
           console.error(error);
@@ -122,14 +143,14 @@ export default {
 }
 
 .btn:hover {
-  background-color: #5b0ba8; /* Darker Purple */
+  background-color: #5b0ba8;
   transform: scale(1.05);
 }
 
 .message {
   margin-top: 20px;
   font-size: 1.2rem;
-  color: #42b983; /* Green */
+  color: #42b983;
   animation: fadeIn 0.5s ease-in-out;
 }
 
@@ -192,5 +213,15 @@ export default {
 
 .recipe-step p {
   margin: 0;
+}
+
+.ingredients-section {
+  margin-top: 20px;
+}
+
+.ingredients-section ul {
+  list-style-type: none;
+  color: #5b0ba8;
+  padding: 0;
 }
 </style>
