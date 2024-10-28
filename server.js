@@ -15,21 +15,27 @@ const openai = new OpenAI({
 });
 
 app.post("/ask", async (req, res) => {
-  const { question } = req.body;
+  const { question, excludedIngredients } = req.body;
 
   if (!question) {
     return res.status(400).send({ error: "Please provide a question" });
   }
 
+  const exclusions =
+    excludedIngredients && excludedIngredients.length > 0
+      ? `Avoid using the following ingredients: ${excludedIngredients.join(
+          ", "
+        )}.`
+      : "";
+
   try {
-    // Fetch a dish image from Pexels API
     const imageResponse = await axios.get("https://api.pexels.com/v1/search", {
       headers: {
         Authorization: process.env.PEXELS_API_KEY,
       },
       params: {
-        query: question, // Use the question or recipe name as the search query
-        per_page: 1, // Fetch only 1 image
+        query: question,
+        per_page: 1,
       },
     });
 
@@ -43,8 +49,7 @@ app.post("/ask", async (req, res) => {
       messages: [
         {
           role: "system",
-          content:
-            "You are an assistant that returns recipes step by step. You give the recipe back in max 150 words.  Please don't include examples. If someone enters an input  that is not asking for a recipe say you can't cook this and add something witty.",
+          content: `You are an assistant that returns recipes step by step. Please keep recipes under 150 words and exclude any unwanted ingredients. ${exclusions}`,
         },
         { role: "user", content: question },
       ],

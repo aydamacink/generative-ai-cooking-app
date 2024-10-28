@@ -7,6 +7,11 @@
         v-model="recipe"
         placeholder="Enter a dish name"
         class="input" />
+      <input
+        type="text"
+        v-model="excludedIngredients"
+        placeholder="Enter ingredients to exclude (comma-separated)"
+        class="input" />
       <button type="submit" class="btn">
         <i class="fas fa-search"></i> Search
       </button>
@@ -36,6 +41,7 @@ export default {
   data() {
     return {
       recipe: "",
+      excludedIngredients: "",
       message: "",
       steps: [],
       recipeImage: "",
@@ -44,23 +50,30 @@ export default {
   methods: {
     async submitRecipe() {
       if (this.recipe) {
-        this.message = `Fetching image for ${this.recipe}...`;
+        this.message = `Fetching image and recipe for ${this.recipe}...`;
 
         try {
-          // Fetch the image and recipe from the backend
-          const response = await axios.post("/ask", { question: this.recipe });
+          const exclusions = this.excludedIngredients
+            .split(",")
+            .map((ingredient) => ingredient.trim());
+
+          const response = await axios.post("/ask", {
+            question: this.recipe,
+            excludedIngredients: exclusions,
+          });
 
           this.recipeImage = response.data.imageUrl;
-
           const recipeText = response.data.answer;
+
           this.steps = recipeText
-            .split(/(?:\d+\.\s)/) // Split by a number, followed by a period and space
+            .split(/(?:\d+\.\s)/)
             .map((step) => step.trim())
             .filter(
               (step) => step !== "" && !step.toLowerCase().includes("recipe")
             );
         } catch (error) {
           this.message = "Something went wrong fetching the recipe or image.";
+          console.error(error);
         }
       } else {
         this.message = "Please enter a dish name.";
