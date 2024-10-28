@@ -1,14 +1,12 @@
-/* Base styles for the app */
 body {
-  font-family: "Inter", sans-serif; /* Clean, modern font */
-  background-color: #f4f4f4; /* Light background to make elements pop */
-  color: #333; /* Neutral dark color for text */
+  font-family: "Inter", sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Global container styling */
 .container {
   max-width: 600px;
   margin: 50px auto;
@@ -18,7 +16,6 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Global input styles */
 input {
   padding: 15px;
   font-size: 1rem;
@@ -30,15 +27,14 @@ input {
 }
 
 input:focus {
-  border-color: #42b983; /* Green accent for focus */
+  border-color: #42b983;
   box-shadow: 0 0 5px rgba(66, 185, 131, 0.5);
   outline: none;
 }
 
-/* Global button styles */
 button {
   font-size: 1.2rem;
-  background-color: #6a0dad; /* Bold purple */
+  background-color: #6a0dad;
   color: white;
   padding: 15px 30px;
   border: none;
@@ -48,25 +44,22 @@ button {
 }
 
 button:hover {
-  background-color: #5b0ba8; /* Darker purple on hover */
+  background-color: #5b0ba8;
   transform: scale(1.05);
 }
 
-/* Global heading styles */
 h1 {
-  color: #6a0dad; /* Purple heading */
+  color: #6a0dad;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 20px;
 }
 
-/* Styling for paragraph text (used for messages or descriptions) */
 p {
   font-size: 1.2rem;
-  color: #42b983; /* Green text color */
+  color: #42b983;
 }
 
-/* Image styling */
 img {
   max-width: 100%;
   height: auto;
@@ -75,7 +68,6 @@ img {
   margin-top: 20px;
 }
 
-/* Fade-in animations for better UI experience */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -85,13 +77,11 @@ img {
   }
 }
 
-/* Animation applied to messages and responses */
 .message,
 .answer {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Responsive design for mobile devices */
 @media (max-width: 600px) {
   .container {
     padding: 10px;
